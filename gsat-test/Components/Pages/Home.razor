@@ -1,14 +1,22 @@
 ﻿@page "/"
-@using
+@using Gsat.Units
 
 <PageTitle>題目產生器</PageTitle>
 <script id="MathJax-script" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <h1>題目</h1>
-<p id="root">
-
-</p>
 
 @{
-
+    var unit = new GcfAndLcm();
+    var q    = unit._2();
 }
+
+<p> @q.question </p>
+<ol>
+    <li> @q.selections[0] </li>
+    <li> @q.selections[1] </li>
+    <li> @q.selections[2] </li>
+    <li> @q.selections[3] </li>
+</ol>
+<p> 答案是 : @q.answer</p>
+<p style="white-space: preserve"> @q.explanation </p>

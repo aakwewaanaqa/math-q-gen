@@ -8,29 +8,79 @@ namespace Gsat.Units;
 [QuestionMaker("math", "最大公因數與最小公倍數", 6)]
 public class GcfAndLcm : IUnit
 {
-    [Question(2)]
+    [Question(1)]
     public Func<Question> _1 => () =>
     {
         var factors = new int[4];
         MathG.GetRandom(2, 10, factors);
-        var a          = factors[0] * factors[1] * factors[2];
-        var b          = factors[0] * factors[1] * factors[3];
-        var answer     = factors[0] * factors[1];
+        var a      = factors[0] * factors[1] * factors[2];
+        var b      = factors[0] * factors[1] * factors[3];
+        var answer = factors[0] * factors[1];
         var selections = new List<string>()
         {
-            $@"\({answer}\)",
-            $@"\({answer * factors[0]}\)",
-            $@"\({answer * factors[1]}\)",
-            $@"\({answer * factors[2]}\)"
+            $@"\({factors[0] * factors[1]}\)",
+            $@"\({factors[0] * factors[2]}\)",
+            $@"\({factors[1] * factors[2]}\)",
+            $@"\({factors[1] * factors[3]}\)"
         }.Scramble();
         return new Question()
         {
             subject    = this.GetSubject(),
             unit       = this.GetUnit(),
             grade      = this.GetGrade(),
-            question   = $"求 {a} 與 {b} 的最大公因數？",
+            question   = @$"求 \({a}\) 與 \({b}\) 的最大公因數？",
             selections = selections.ToArray(),
-            answer     = selections.IndexOf($@"\({answer}\)"),
+            answer     = selections.IndexOf($@"\({answer}\)") + 1,
+            explanation = $@"\({a}\) 的公因數是 \({MathG.GetFactors(a).Print()}\)" + "\n" +
+                          $@"\({b}\) 的公因數是 \({MathG.GetFactors(b).Print()}\)" + "\n" +
+                          $@"因此 \({a}\) 與 \({b}\) 的最大公因數是 \({answer}\)"
+        };
+    };
+
+    public Func<Question> _2 => () =>
+    {
+        var factors = new[] { 2, 3, 5 };
+        var a = new ListBuilder<int>()
+               .SetSeparator(@"\times")
+               .SetQuote(@"\(", @"\)")
+               .Pick(factors, 0, MathG.GetRandom(1, 1))
+               .Pick(factors, 1, MathG.GetRandom(0, 2))
+               .Pick(factors, 2, MathG.GetRandom(0, 1))
+            ;
+        var b = new ListBuilder<int>()
+               .SetSeparator(@"\times")
+               .SetQuote(@"\(", @"\)")
+               .Pick(factors, 0, MathG.GetRandom(0, 1))
+               .Pick(factors, 1, MathG.GetRandom(1, 1))
+               .Pick(factors, 2, MathG.GetRandom(0, 2))
+            ;
+        var c = new ListBuilder<int>()
+               .SetSeparator(@"\times")
+               .SetQuote(@"\(", @"\)")
+               .Pick(factors, 0, MathG.GetRandom(0, 2))
+               .Pick(factors, 1, MathG.GetRandom(0, 1))
+               .Pick(factors, 2, MathG.GetRandom(1, 1))
+            ;
+
+        var numA = (a + b);
+        var numB = (a + c);
+        var numC = (b + c);
+        var answer = numA | numB | numC;
+        var selections = new List<string>()
+        {
+            $"{(answer)}",
+            $"{(answer + 2 + 3)}",
+            $"{(answer + 3)}",
+            $"{(answer - 2 + 5)}"
+        }.Scramble();
+        return new Question()
+        {
+            subject    = this.GetSubject(),
+            unit       = this.GetUnit(),
+            grade      = this.GetGrade(),
+            question   = $"{numA} 與 {numB} 及 {numC} 的最小公倍數是多少？",
+            selections = selections.ToArray(),
+            answer     = selections.IndexOf($"{answer}") + 1,
         };
     };
 }

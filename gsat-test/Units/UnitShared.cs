@@ -32,4 +32,9 @@ public static class UnitShared
         }
         return result;
     }
+
+    public static string Print(this IEnumerable<int> factors)
+    {
+        return string.Join(", ", factors);
+    }
 }
