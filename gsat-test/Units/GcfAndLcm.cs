@@ -23,15 +23,15 @@ public class GcfAndLcm : IUnit
     public Func<Question> _1 => () =>
     {
         var factors = new ListBuilder<int>([2, 3, 4, 5, 6, 7, 8, 9, 10]).Choose(4);
-        var a      = factors[0] * factors[1] * factors[2];
-        var b      = factors[0] * factors[1] * factors[3];
-        var gcf = factors[0] * factors[1];
-        new SelectionBuilder(@$"\({gcf}\)",[
-            @$"\({factors[0] * factors[2]}\)",
-            @$"\({factors[0] * factors[3]}\)",
-            @$"\({factors[1] * factors[2]}\)",
-            @$"\({factors[1] * factors[3]}\)",
-            @$"\({factors[2] * factors[3]}\)",
+        var a       = factors[0] * factors[1] * factors[2];
+        var b       = factors[0] * factors[1] * factors[3];
+        var gcf     = factors[0] * factors[1];
+        new SelectionBuilder(@$"\({gcf}\)", [
+                @$"\({factors[0] * factors[2]}\)",
+                @$"\({factors[0] * factors[3]}\)",
+                @$"\({factors[1] * factors[2]}\)",
+                @$"\({factors[1] * factors[3]}\)",
+                @$"\({factors[2] * factors[3]}\)",
             ]
         ).Output(out var selections, out var answer);
         return new Question()
@@ -118,7 +118,7 @@ public class GcfAndLcm : IUnit
             question   = $@"\({number} \div \)🌵\( = \)🪴 \(\dots {mod} \)，如果 🪴 比 \(1\) 大，🌵 最大是多少？",
             answer     = answer,
             selections = selections,
-            explanation = "如果要讓 🌵 最大就要讓 🪴 最小，因此 🌵 是最大因數。"  +
+            explanation = "如果要讓 🌵 最大就要讓 🪴 最小，因此 🌵 是最大因數。" +
                           $@"先讓 \({number} - {mod}\) 就可以整除了，" +
                           $@"再找到 \({number}\) 的因數 \({factors}\) 中最大的是 \({maxFactor}\)。"
         };
@@ -146,6 +146,30 @@ public class GcfAndLcm : IUnit
             answer      = answer,
             selections  = selections,
             explanation = $@"\({gcf.ToArray().Print()}\)"
+        };
+    };
+
+    /// 找出 117 正確質因數分解
+    [Question(difficulty: 1)]
+    public Func<Question> _5 => () =>
+    {
+        var primes  = times + [2, 3];
+        var a       = primes.Choose(4, true);
+        var product = a.Product();
+        new SelectionBuilder(a.ToString(), [
+            $@"{a - a[0]}",
+            $@"{a - a[1]}",
+            $@"{a - a[2]}",
+            $@"{a + a[0]}",
+            $@"{a + a[1]}",
+            $@"{a + a[2]}",
+        ]).Output(out var selections, out var answer);
+        return new Question
+        {
+            question    = $@"找出 \({product}\) 正確質因數分解",
+            answer      = answer,
+            selections  = selections,
+            explanation = $@"\({product}\) 的質因數是 \({MathG.GetFactors(product)}\)"
         };
     };
 }

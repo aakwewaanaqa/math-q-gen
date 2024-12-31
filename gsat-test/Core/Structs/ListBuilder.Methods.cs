@@ -27,4 +27,9 @@ public partial struct ListBuilder<T>
         Array.Fill(result, array[index]);
         return new ListBuilder<T>(result, this);
     }
+
+    public T AnyOne()
+    {
+        return array[MathG.GetRandom(0, array.Length)];
+    }
 }
