@@ -1,6 +1,4 @@
-﻿using Gsat.Core;
-
-namespace Gsat.Structs;
+﻿namespace Gsat.Core.Structs;
 
 public readonly struct Frac(int n, int d)
 {
@@ -19,7 +17,7 @@ public readonly struct Frac(int n, int d)
 
     public Frac Reduce()
     {
-        int gcd = MathG.Gcf(n, d);
+        var gcd = MathG.Gcf(n, d);
         return new Frac(n / gcd, d / gcd);
     }
 

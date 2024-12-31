@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Gsat.Core;
-using Gsat.Structs;
+using Gsat.Core.Interfaces;
+using Gsat.Core.Structs;
 
 namespace Gsat.Units;
 

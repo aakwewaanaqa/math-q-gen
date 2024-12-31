@@ -1,7 +1,6 @@
-﻿using Gsat.Core;
-using Gsat.Units;
+﻿using Gsat.Units;
 
-namespace Gsat.Structs;
+namespace Gsat.Core.Structs;
 
 public readonly struct SelectionBuilder(string answer, string[] selections)
 {
@@ -16,9 +15,10 @@ public readonly struct SelectionBuilder(string answer, string[] selections)
             var r = MathG.GetRandom(0, list.Count);
             list.RemoveAt(r);
         }
+
         list.Add(this.answer);
 
         selections = list.Scramble().ToArray();
-        answer = Array.IndexOf(selections, this.answer) + 1;
+        answer     = Array.IndexOf(selections, this.answer) + 1;
     }
 }
