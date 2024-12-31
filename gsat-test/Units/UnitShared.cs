@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Gsat.Core;
 using Gsat.Structs;
 
 namespace Gsat.Units;

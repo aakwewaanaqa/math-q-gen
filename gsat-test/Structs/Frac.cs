@@ -1,4 +1,6 @@
-﻿namespace Gsat.Structs;
+﻿using Gsat.Core;
+
+namespace Gsat.Structs;
 
 public readonly struct Frac(int n, int d)
 {

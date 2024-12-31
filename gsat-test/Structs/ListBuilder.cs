@@ -38,6 +38,15 @@ public struct ListBuilder<T>()
         return this;
     }
 
+    public static ListBuilder<T> operator +(ListBuilder<T> a, T[] b)
+    {
+        var array = new T[a.Count + b.Length];
+        a.array.CopyTo(array, 0);
+        b.CopyTo(array, a.Count);
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
+        return new ListBuilder<T>(array, a);
+    }
+
     public static ListBuilder<T> operator +(ListBuilder<T> a, ListBuilder<T> b)
     {
         var array = new T[a.Count + b.Count];
@@ -76,6 +85,8 @@ public struct ListBuilder<T>()
 
     public static ListBuilder<T> operator *(ListBuilder<T> a, int count)
     {
+        if (count <= 0) return new ListBuilder<T>([], a);
+
         var array = new T[a.Count                               * count];
         for (var i = 0; i < count; i++) a.array.CopyTo(array, i * a.Count);
         if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
@@ -119,5 +130,20 @@ public struct ListBuilder<T>()
     public override string ToString()
     {
         return stringBeginning + string.Join(stringSeparator, array) + stringEnding;
+    }
+
+    public T Aggregate(Func<T, T, T> func)
+    {
+        return array.Aggregate(func);
+    }
+
+    public IEnumerable<U> Select<U>(Func<T, U> func)
+    {
+        return array.Select(item => func(item));
+    }
+
+    public T[] ToArray()
+    {
+        return (T[])array.Clone();
     }
 }
