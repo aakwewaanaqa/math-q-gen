@@ -7,17 +7,17 @@ public static class UnitShared
 {
     public static string GetSubject(this IUnit unit)
     {
-        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>().Subject;
+        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!.Subject;
     }
 
     public static string GetUnit(this IUnit unit)
     {
-        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>().Unit;
+        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!.Unit;
     }
 
     public static int GetGrade(this IUnit unit)
     {
-        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>().Grade;
+        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!.Grade;
     }
 
     public static IList<string> Scramble(this IEnumerable<string> selections)
