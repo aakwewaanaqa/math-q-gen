@@ -5,19 +5,17 @@ namespace Gsat.Units;
 
 public static class UnitShared
 {
-    public static string GetSubject(this IUnit unit)
+    public static Question GetQuestion(this IUnit unit, int index)
     {
-        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!.Subject;
-    }
-
-    public static string GetUnit(this IUnit unit)
-    {
-        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!.Unit;
-    }
-
-    public static int GetGrade(this IUnit unit)
-    {
-        return unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!.Grade;
+        var prop = unit.GetType().GetProperty($"_{index}")!;
+        var q = ((Func<Question>)prop.GetValue(unit)!)();
+        var qAtt = prop.GetCustomAttribute<QuestionAttribute>()!;
+        var uAtt = unit.GetType().GetCustomAttribute<QuestionMakerAttribute>()!;
+        q.difficulty = qAtt.Difficulty;
+        q.subject    = uAtt.Subject;
+        q.unitName   = uAtt.UnitName;
+        q.grade      = uAtt.Grade;
+        return q;
     }
 
     public static IList<string> Scramble(this IEnumerable<string> selections)

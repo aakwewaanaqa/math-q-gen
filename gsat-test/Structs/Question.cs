@@ -3,7 +3,7 @@
 public struct Question
 {
     public string   subject;     // 科目
-    public string   unit;        // 單元
+    public string   unitName;        // 單元
     public int      grade;       // 年級
     public int      difficulty;  // 難度
     public string   question;    // 問題

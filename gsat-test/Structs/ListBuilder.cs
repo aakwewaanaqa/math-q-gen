@@ -2,30 +2,28 @@
 
 namespace Gsat.Structs;
 
-public struct ListBuilder<T>
+public struct ListBuilder<T>()
 {
-    public ListBuilder()
+    public ListBuilder(IEnumerable<T> array) : this()
     {
+        this.array = array.ToArray();
     }
 
-    private T[]    array           { get; init; } = [];
-    private string stringSeparator { get; set; }  = ", ";
-    private string stringBeginning { get; set; }  = "";
-    private string stringEnding    { get; set; }  = "";
+    private ListBuilder(T[] array, ListBuilder<T> settings) : this()
+    {
+        this.array      = array;
+        stringSeparator = settings.stringSeparator;
+        stringBeginning = settings.stringBeginning;
+        stringEnding    = settings.stringEnding;
+    }
+
+    private T[]    array = [];
+    private string stringSeparator { get; set; } = ", ";
+    private string stringBeginning { get; set; } = "";
+    private string stringEnding    { get; set; } = "";
 
     public int Count => array.Length;
-
-    private ListBuilder<T> Clone()
-    {
-        var result = new ListBuilder<T>
-        {
-            stringSeparator = stringSeparator,
-            stringBeginning = stringBeginning,
-            stringEnding    = stringEnding,
-            array           = (T[])array.Clone()
-        };
-        return result;
-    }
+    public ListBuilder<T> this[Range r] => new(array[r], this);
 
     public ListBuilder<T> SetSeparator(string separator)
     {
@@ -40,46 +38,65 @@ public struct ListBuilder<T>
         return this;
     }
 
-    public ListBuilder<T> Pick(IEnumerable<T> src, int index, int count)
-    {
-        var item = src.ElementAt(index);
-        for (int i = 0; i < count; i++) array.Add(item);
-        return this;
-    }
-
     public static ListBuilder<T> operator +(ListBuilder<T> a, ListBuilder<T> b)
     {
-        var result = a.Clone();
-        result.array.AddRange(b.array);
-        return result;
+        var array = new T[a.Count + b.Count];
+        a.array.CopyTo(array, 0);
+        b.array.CopyTo(array, a.Count);
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
+        return new ListBuilder<T>(array, a);
     }
 
     public static ListBuilder<T> operator +(ListBuilder<T> a, T b)
     {
-        var result = a.Clone();
-        result.array.Add(b);
-        return result;
+        var array = new T[a.Count + 1];
+        a.array.CopyTo(array, 0);
+        array[^1] = b;
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
+        return new ListBuilder<T>(array, a);
+    }
+
+    public static ListBuilder<T> operator +(T b, ListBuilder<T> a)
+    {
+        var array = new T[a.Count + 1];
+        array[0] = b;
+        a.array.CopyTo(array, 1);
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
+        return new ListBuilder<T>(array, a);
     }
 
     public static ListBuilder<T> operator -(ListBuilder<T> a, T b)
     {
-        var result = a.Clone();
-        result.array.Remove(b);
-        return result;
+        var aList = a.array.ToList();
+        aList.Remove(b);
+        var array = aList.ToArray();
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
+        return new ListBuilder<T>(array, a);
+    }
+
+    public static ListBuilder<T> operator *(ListBuilder<T> a, int count)
+    {
+        var array = new T[a.Count                               * count];
+        for (var i = 0; i < count; i++) a.array.CopyTo(array, i * a.Count);
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
+        return new ListBuilder<T>(array, a);
     }
 
     public static ListBuilder<T> operator &(ListBuilder<T> a, ListBuilder<T> b)
     {
         var aList = a.array.ToList();
         var bList = b.array.ToList();
+        var array = (from item in aList
+                     let flag = bList.Remove(item)
+                     where flag
+                     select item).ToArray();
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
         return new ListBuilder<T>()
         {
             stringSeparator = a.stringSeparator,
             stringBeginning = a.stringBeginning,
             stringEnding    = a.stringEnding,
-            array           = (from item in aList
-                               let flag = bList.Remove(item)
-                               where flag select item).ToArray()
+            array           = array,
         };
     }
 
@@ -88,13 +105,14 @@ public struct ListBuilder<T>
         var aList = a.array.ToList();
         var bList = b.array.ToList();
         foreach (var item in aList) bList.Remove(item);
-        var r     = aList.Concat(bList);
+        var array = aList.Concat(bList).ToArray();
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(array);
         return new ListBuilder<T>()
         {
             stringSeparator = a.stringSeparator,
             stringBeginning = a.stringBeginning,
             stringEnding    = a.stringEnding,
-            array           = r.ToArray()
+            array           = array
         };
     }
 
