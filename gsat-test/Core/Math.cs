@@ -22,16 +22,24 @@ public static class MathG
 
     public static int GetRandomExcept(int min, int max, IEnumerable<int> except)
     {
-        var range = Enumerable.Range(min, max - min).Except(except).ToArray();
-        return range[random.Next(0, range.Length)];
+        var r = GetRandom(min, max);
+        while (except.Contains(r)) r = GetRandom(min, max);
+        return r;
     }
 
-    public static void GetRandom(int min, int max, int[] result)
+    public static int GetRandomExcept(int min, int max, Func<int, bool> predicate)
+    {
+        var r = GetRandom(min, max);
+        while (predicate(r)) r = GetRandom(min, max);
+        return r;
+    }
+
+    public static void GetRandom(int min, int max, int[] result, bool canRepeat = false)
     {
         for (int i = 0; i < result.Length;)
         {
             var r = GetRandom(min, max);
-            if (result.Contains(r)) continue;
+            if (!canRepeat && result.Contains(r)) continue;
             result[i] = r;
             i++;
         }

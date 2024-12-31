@@ -12,6 +12,9 @@ public class GcfAndLcm : IUnit
     private static readonly ListBuilder<int> times =
         new ListBuilder<int>().SetSeparator(@"\times").SetQuote(@"\(", @"\)");
 
+    private static readonly ListBuilder<int> commas =
+        new ListBuilder<int>().SetSeparator(@", ").SetQuote(@"\(", @"\)");
+
     /// <summary>
     ///     求 64 與 30 的最大公因數？
     /// </summary>
@@ -133,24 +136,24 @@ public class GcfAndLcm : IUnit
     [Question(difficulty: 1)]
     public Func<Question> _4 => () =>
     {
-        var f = new int[5];
-        MathG.GetRandom(2, 10, f);
-        var a = f[0] * f.GetRandom();
-        var b = f[1] * f.GetRandom();
-        var c = f[2] * f.GetRandom();
-        var commonFactors = new ListBuilder<int>(MathG.GetCommonFactors(a, b)) &
-                            new ListBuilder<int>(MathG.GetCommonFactors(b, c)) &
-                            new ListBuilder<int>(MathG.GetCommonFactors(a, c));
-        var whichIsNot = MathG.GetRandomExcept(2, 10, commonFactors.ToArray());
+        var from       = commas + [2, 3, 4];
+        var mult       = (commas + [4, 6, 7, 9, 11, 13]).Choose(3);
+        var gcf        = from.Choose(MathG.GetRandom(2, 3), true);
+        var a          = (gcf + mult[0]).Aggregate((a, b) => a * b);
+        var b          = (gcf + mult[1]).Aggregate((a, b) => a * b);
+        var c          = (gcf + mult[2]).Aggregate((a, b) => a * b);
+        var factors    = MathG.GetFactors(gcf.Aggregate((a, b) => a * b));
+        var whichIsNot = MathG.GetRandomExcept(2, 10, factors);
         new SelectionBuilder(
             $@"\({whichIsNot}\)",
-            commonFactors.Select(e => $@"\({e}\)").ToArray()
+            factors.Select(e => $@"\({e}\)").ToArray()
         ).Output(out var selections, out var answer);
         return new Question
         {
-            question = $@"以下哪一個數不是 \({a}\) 與 \({b}\) 及 \({c}\) 的公因數？",
-            answer = answer,
-            selections = selections,
+            question    = $@"以下哪一個數不是 \({a}\) 與 \({b}\) 及 \({c}\) 的公因數？",
+            answer      = answer,
+            selections  = selections,
+            explanation = $@"\({gcf.ToArray().Print()}\)"
         };
     };
 }

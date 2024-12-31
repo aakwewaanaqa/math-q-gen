@@ -9,9 +9,9 @@ public struct ListBuilder<T>()
         this.array = array.ToArray();
     }
 
-    private ListBuilder(T[] array, ListBuilder<T> settings) : this()
+    private ListBuilder(IEnumerable<T> array, ListBuilder<T> settings) : this()
     {
-        this.array      = array;
+        this.array      = array.ToArray();
         stringSeparator = settings.stringSeparator;
         stringBeginning = settings.stringBeginning;
         stringEnding    = settings.stringEnding;
@@ -24,6 +24,8 @@ public struct ListBuilder<T>()
 
     public int Count => array.Length;
     public ListBuilder<T> this[Range r] => new(array[r], this);
+    public T this[Index i] => array[i];
+    public T this[int i] => array[i];
 
     public ListBuilder<T> SetSeparator(string separator)
     {
@@ -145,5 +147,18 @@ public struct ListBuilder<T>()
     public T[] ToArray()
     {
         return (T[])array.Clone();
+    }
+
+    public ListBuilder<T> Choose(int count, bool canRepeat = false)
+    {
+        var list = new List<T>();
+        for (var i = 0; i < count;)
+        {
+            var item = array[MathG.GetRandom(0, array.Length)];
+            if (!canRepeat && list.Contains(item)) continue;
+            list.Add(item);
+            i++;
+        }
+        return new ListBuilder<T>(list, this);
     }
 }
