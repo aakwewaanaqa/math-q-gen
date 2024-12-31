@@ -13,6 +13,15 @@ public partial struct ListBuilder<T>
         return new ListBuilder<T>(result, a);
     }
 
+    public static ListBuilder<T> operator +(ListBuilder<T> a, ListBuilder<T> b)
+    {
+        var result = new T[a.Count + b.Count];
+        a.array.CopyTo(result, 0);
+        b.array.CopyTo(result, a.Count);
+        if (typeof(T).IsAssignableTo(typeof(IComparable))) Array.Sort(result);
+        return new ListBuilder<T>(result, a);
+    }
+
     public static ListBuilder<T> operator +(ListBuilder<T> a, T b)
     {
         var array = new T[a.Count + 1];

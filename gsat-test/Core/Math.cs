@@ -1,4 +1,5 @@
-﻿using static System.Random;
+﻿using Gsat.Core.Structs;
+using static System.Random;
 
 namespace Gsat.Core;
 
@@ -56,27 +57,16 @@ public static class MathG
         return a | b;
     }
 
-    public static IEnumerable<int> GetFactors(int a, bool withoutSelf = false)
+    public static ListBuilder<int> GetFactors(int a, bool withoutSelf = false)
     {
+        var list = new List<int>();
         for (var i = 1; i <= a; i++)
         {
             if (withoutSelf && i == a) continue;
-            if (a % i == 0) yield return i;
+            if (a % i == 0) list.Add(i);
         }
-    }
 
-    public static IEnumerable<int> GetCommonFactors(int a, int b)
-    {
-        var factorsA = GetFactors(a).ToList();
-        var factorsB = GetFactors(b).ToList();
-        return factorsA.Intersect(factorsB);
-    }
-
-    public static IList<T> ToSortList<T>(this IEnumerable<T> ie)
-    {
-        var list = ie.ToList();
-        list.Sort();
-        return list;
+        return new ListBuilder<int>(list);
     }
 
     public static T GetRandom<T>(this IEnumerable<T> ie)

@@ -1,5 +1,6 @@
 ﻿using Gsat.Core;
-using Gsat.Structs;
+using Gsat.Core.Interfaces;
+using Gsat.Core.Structs;
 
 namespace Gsat.Units;
 
@@ -21,25 +22,25 @@ public class GcfAndLcm : IUnit
     [Question(difficulty: 1)]
     public Func<Question> _1 => () =>
     {
-        var factors = new int[4];
-        MathG.GetRandom(2, 10, factors);
+        var factors = new ListBuilder<int>([2, 3, 4, 5, 6, 7, 8, 9, 10]).Choose(4);
         var a      = factors[0] * factors[1] * factors[2];
         var b      = factors[0] * factors[1] * factors[3];
-        var answer = factors[0] * factors[1];
-        var selections = new List<string>()
-        {
-            $@"\({factors[0] * factors[1]}\)",
-            $@"\({factors[0] * factors[2]}\)",
-            $@"\({factors[1] * factors[2]}\)",
-            $@"\({factors[1] * factors[3]}\)"
-        }.Scramble();
+        var gcf = factors[0] * factors[1];
+        new SelectionBuilder(@$"\({gcf}\)",[
+            @$"\({factors[0] * factors[2]}\)",
+            @$"\({factors[0] * factors[3]}\)",
+            @$"\({factors[1] * factors[2]}\)",
+            @$"\({factors[1] * factors[3]}\)",
+            @$"\({factors[2] * factors[3]}\)",
+            ]
+        ).Output(out var selections, out var answer);
         return new Question()
         {
             question   = @$"求 \({a}\) 與 \({b}\) 的最大公因數？",
-            selections = selections.ToArray(),
-            answer     = selections.IndexOf($@"\({answer}\)") + 1,
-            explanation = $@"\({a}\) 的公因數是 \({MathG.GetFactors(a).Print()}\)" + "\n" +
-                          $@"\({b}\) 的公因數是 \({MathG.GetFactors(b).Print()}\)" + "\n" +
+            selections = selections,
+            answer     = answer,
+            explanation = $@"\({a}\) 的公因數是 \({MathG.GetFactors(a)}\)" + "\n" +
+                          $@"\({b}\) 的公因數是 \({MathG.GetFactors(b)}\)" + "\n" +
                           $@"因此 \({a}\) 與 \({b}\) 的最大公因數是 \({answer}\)"
         };
     };
@@ -51,21 +52,15 @@ public class GcfAndLcm : IUnit
     public Func<Question> _2 => () =>
     {
         var factors = times + [2, 3, 5];
-        var a = times
-              + factors[0..1] * MathG.GetRandom(1, 1)
-              + factors[1..2] * MathG.GetRandom(0, 2)
-              + factors[2..3] * MathG.GetRandom(0, 1)
-            ;
-        var b = times
-              + factors[0..1] * MathG.GetRandom(0, 1)
-              + factors[1..2] * MathG.GetRandom(1, 1)
-              + factors[2..3] * MathG.GetRandom(0, 2)
-            ;
-        var c = times
-              + factors[0..1] * MathG.GetRandom(0, 2)
-              + factors[1..2] * MathG.GetRandom(0, 1)
-              + factors[2..3] * MathG.GetRandom(1, 1)
-            ;
+        var a = times + factors[0]
+                      + factors.Take(1, new R(0, 2))
+                      + factors.Take(2, new R(0, 1));
+        var b = times + factors[1]
+                      + factors.Take(2, new R(0, 2))
+                      + factors.Take(0, new R(0, 1));
+        var c = times + factors[2]
+                      + factors.Take(0, new R(0, 2))
+                      + factors.Take(1, new R(0, 1));
 
         var numA = (a + b);
         var numB = (a + c);
@@ -95,18 +90,15 @@ public class GcfAndLcm : IUnit
     public Func<Question> _3 => () =>
     {
         var f = new ListBuilder<int>([2, 3, 4, 5, 6, 7]);
-        var comp = (new ListBuilder<int>()
-                       .SetSeparator(@"\times")
-                       .SetQuote(@"\(", @"\)")
-                  + f[0..1] * MathG.GetRandom(1, 2)
-                  + f[1..2] * MathG.GetRandom(1, 2)
-                  + f[2..3] * MathG.GetRandom(0, 2)
-                  + f[3..4] * MathG.GetRandom(0, 2)
-                  + f[5..6] * MathG.GetRandom(0, 2)
-                   )
-           .Aggregate((a, b) => a * b);
-        var factors   = MathG.GetFactors(comp, withoutSelf: true).ToSortList();
-        var divider   = factors.GetRandomRange(1, 12);
+        var comp = (times
+                    + f.Take(0, new R(1, 2))
+                    + f.Take(1, new R(1, 2))
+                    + f.Take(2, new R(0, 2))
+                    + f.Take(3, new R(0, 2))
+                    + f.Take(4, new R(0, 2))
+                    + f.Take(5, new R(0, 2))).Product();
+        var factors   = MathG.GetFactors(comp, withoutSelf: true);
+        var divider   = factors.GetFromR(new R(1, 12));
         var quotient  = comp / divider;
         var mod       = MathG.GetRandom(1, divider);
         var number    = divider * quotient + mod;
@@ -128,7 +120,7 @@ public class GcfAndLcm : IUnit
             selections = selections,
             explanation = "如果要讓 🌵 最大就要讓 🪴 最小，因此 🌵 是最大因數。"  +
                           $@"先讓 \({number} - {mod}\) 就可以整除了，" +
-                          $@"再找到 \({number}\) 的因數 \({factors.Print()}\) 中最大的是 \({maxFactor}\)。"
+                          $@"再找到 \({number}\) 的因數 \({factors}\) 中最大的是 \({maxFactor}\)。"
         };
     };
 
@@ -138,12 +130,12 @@ public class GcfAndLcm : IUnit
     {
         var from       = commas + [2, 3, 4];
         var mult       = (commas + [4, 6, 7, 9, 11, 13]).Choose(3);
-        var gcf        = from.Choose(MathG.GetRandom(2, 3), true);
-        var a          = (gcf + mult[0]).Aggregate((a, b) => a * b);
-        var b          = (gcf + mult[1]).Aggregate((a, b) => a * b);
-        var c          = (gcf + mult[2]).Aggregate((a, b) => a * b);
-        var factors    = MathG.GetFactors(gcf.Aggregate((a, b) => a * b));
-        var whichIsNot = MathG.GetRandomExcept(2, 10, factors);
+        var gcf        = from.Choose(new R(2, 3), true);
+        var a          = (gcf + mult[0]).Product();
+        var b          = (gcf + mult[1]).Product();
+        var c          = (gcf + mult[2]).Product();
+        var factors    = MathG.GetFactors(gcf.Product());
+        var whichIsNot = new R(2, 10, factors);
         new SelectionBuilder(
             $@"\({whichIsNot}\)",
             factors.Select(e => $@"\({e}\)").ToArray()

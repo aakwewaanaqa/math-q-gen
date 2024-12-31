@@ -64,18 +64,4 @@ public partial struct ListBuilder<T>()
     {
         return (T[])array.Clone();
     }
-
-    public ListBuilder<T> Choose(int count, bool canRepeat = false)
-    {
-        var list = new List<T>();
-        for (var i = 0; i < count;)
-        {
-            var item = array[MathG.GetRandom(0, array.Length)];
-            if (!canRepeat && list.Contains(item)) continue;
-            list.Add(item);
-            i++;
-        }
-
-        return new ListBuilder<T>(list, this);
-    }
 }

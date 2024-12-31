@@ -32,5 +32,9 @@ public static class ListBuilderExts
         return ints.ToArray().Aggregate((a, b) => a * b);
     }
     
-    
+    public static int GetFromR(this ListBuilder<int> ints, R r)
+    {
+        var where = ints.ToArray().Where(i => i >= r.min && i <= r.max).ToArray();
+        return where.ElementAt(GetRandom(0, where.Length));
+    }
 }
