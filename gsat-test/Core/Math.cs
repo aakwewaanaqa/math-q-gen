@@ -1,4 +1,5 @@
-﻿using Gsat.Core.Structs;
+﻿using Gsat.Core.Maths;
+using Gsat.Core.Structs;
 using static System.Random;
 
 namespace Gsat.Core;
@@ -21,31 +22,6 @@ public static class MathG
         return primes[random.Next(0, primes.Length)];
     }
 
-    public static int GetRandomExcept(int min, int max, IEnumerable<int> except)
-    {
-        var r = GetRandom(min, max);
-        while (except.Contains(r)) r = GetRandom(min, max);
-        return r;
-    }
-
-    public static int GetRandomExcept(int min, int max, Func<int, bool> predicate)
-    {
-        var r = GetRandom(min, max);
-        while (predicate(r)) r = GetRandom(min, max);
-        return r;
-    }
-
-    public static void GetRandom(int min, int max, int[] result, bool canRepeat = false)
-    {
-        for (int i = 0; i < result.Length;)
-        {
-            var r = GetRandom(min, max);
-            if (!canRepeat && result.Contains(r)) continue;
-            result[i] = r;
-            i++;
-        }
-    }
-
     public static int Gcf(int a, int b)
     {
         while (a != 0 && b != 0)
@@ -57,7 +33,7 @@ public static class MathG
         return a | b;
     }
 
-    public static ListBuilder<int> GetFactors(int a, bool withoutSelf = false)
+    public static Seq<int> GetFactors(int a, bool withoutSelf = false)
     {
         var list = new List<int>();
         for (var i = 1; i <= a; i++)
@@ -66,16 +42,6 @@ public static class MathG
             if (a % i == 0) list.Add(i);
         }
 
-        return new ListBuilder<int>(list);
-    }
-
-    public static T GetRandom<T>(this IEnumerable<T> ie)
-    {
-        return ie.ElementAt(random.Next(0, ie.Count()));
-    }
-
-    public static int GetRandomRange(this IEnumerable<int> ie, int min, int max)
-    {
-        return ie.Where(i => i >= min && i <= max).GetRandom();
+        return new Seq<int>(list);
     }
 }

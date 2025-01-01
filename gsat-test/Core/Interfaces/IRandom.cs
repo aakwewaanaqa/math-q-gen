@@ -2,5 +2,5 @@
 
 public interface IRandom<T>
 {
-    T GetValue();
+    T ToInt();
 }
