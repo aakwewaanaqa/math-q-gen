@@ -7,10 +7,17 @@ public readonly struct RFloat(float min, float max, int precision = 1)
     public readonly int precision = precision;
     private static readonly Random random = new();
 
-    public float ToFloat()
+    public Floats ToFloat()
     {
-        return (float) Math.Round(random.NextDouble() * (max - min) + min, precision);
+        var f = random.NextDouble() * (max - min) + min;
+        f *= Math.Pow(10, precision);
+        return new Floats((int)Math.Round(f), precision);
     }
 
-    public static implicit operator float(RFloat r) => r.ToFloat();
+    public static implicit operator Floats(RFloat r) => r.ToFloat();
+
+    public override string ToString()
+    {
+        return ToFloat().ToString();
+    }
 }

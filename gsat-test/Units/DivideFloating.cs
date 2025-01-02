@@ -34,4 +34,28 @@ public class DivideFloating : IUnit
             ]
         ).ToQuestion();
     };
+
+    [Question(1)]
+    public Func<Question> _2 => () =>
+    {
+        var o = (new Seq<int>([2, 3, 4]) >> new C(3, canRepeat: true)).Product();
+        var a = new RFloat(1, 5, 1).ToFloat();
+        var b = new RFloat(1, 5, 1).ToFloat();
+        var x = a * b * o;
+
+        return new QuestionBuilder(
+            [
+                $@"\({x} \div {a} \div {b} = ?\)",
+            ],
+            $@"\({o}\)",
+            [
+                $@"\({o * 2}\)",
+                $@"\({o * 3}\)",
+                $@"\({o * 4}\)",
+                $@"\({o / 2}\)",
+                $@"\({o / 3}\)",
+                $@"\({o / 4}\)",
+            ]
+        ).ToQuestion();
+    };
 }

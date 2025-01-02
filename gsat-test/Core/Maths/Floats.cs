@@ -16,7 +16,7 @@ public readonly struct Floats(int i, int shift)
         var shiftDelta = a.shift > b.shift ? a.shift - b.shift : b.shift - a.shift;
         var less       = a.shift > b.shift ? b : a;
         var more       = a.shift > b.shift ? a : b;
-        var newI       = more.i + less.i * 10 * shiftDelta;
+        var newI       = more.i + less.i * 10.Pow(shiftDelta);
         return new Floats(newI, more.shift).Simplify;
     }
 
@@ -31,7 +31,7 @@ public readonly struct Floats(int i, int shift)
         var shiftDelta = a.shift > b.shift ? a.shift - b.shift : b.shift - a.shift;
         var less       = a.shift > b.shift ? b : a;
         var more       = a.shift > b.shift ? a : b;
-        var newI       = more.i - less.i * 10 * shiftDelta;
+        var newI       = more.i - less.i * 10.Pow(shiftDelta);
         return new Floats(newI, more.shift).Simplify;
     }
 
@@ -48,7 +48,7 @@ public readonly struct Floats(int i, int shift)
         }
 
         {
-            var newI = a.i / b;
+            var newI = a.i * b;
             return new Floats(newI, a.shift).Simplify;
         }
     }
@@ -57,12 +57,6 @@ public readonly struct Floats(int i, int shift)
     {
         var newI     = a.i * b.i;
         var newShift = a.shift + b.shift;
-        while (a.i % 10 == 0)
-        {
-            newI /= 10;
-            newShift--;
-        }
-
         return new Floats(newI, newShift).Simplify;
     }
 
@@ -146,6 +140,6 @@ public readonly struct Floats(int i, int shift)
     public Frac ToFrac()
     {
         var simple = Simplify;
-        return new Frac(simple.i, simple.shift.Pow(10)).Real;
+        return new Frac(simple.i, 10.Pow(simple.shift)).Real;
     }
 }
