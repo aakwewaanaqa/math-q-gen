@@ -5,9 +5,7 @@ using Gsat.Core.Structs;
 
 namespace Gsat.Units;
 
-/// <summary>
-///     最大公因數與最小公倍數
-/// </summary>
+/// 最大公因數與最小公倍數
 [QuestionMaker("math", "最大公因數與最小公倍數", 6)]
 public class GcfAndLcm : IUnit
 {
@@ -17,14 +15,12 @@ public class GcfAndLcm : IUnit
     private static readonly Seq<int> commas =
         new Seq<int>().SetSeparator(@", ").SetQuote(@"\(", @"\)");
 
-    /// <summary>
-    ///     求 64 與 30 的最大公因數？
-    /// </summary>
+    /// 求 64 與 30 的最大公因數？
     [Question(difficulty: 1)]
     public Func<Question> _1 => () =>
     {
         var f   = new Seq<int>([2, 3, 4, 5, 6, 7, 8, 9, 10]) >> new C(4); // 因數乘積
-        var gcf = f[0] * f[1];                                           // 公因數
+        var gcf = f[0] * f[1];                                            // 最大公因數
         var a   = f[0] * f[1] * f[2];
         var b   = f[0] * f[1] * f[3];
         return new QuestionBuilder(
@@ -46,9 +42,7 @@ public class GcfAndLcm : IUnit
         ).ToQuestion();
     };
 
-    /// <summary>
-    ///     2 * 2 * 3 與 2 * 3 * 5 及 3 * 5 * 7 的最小公倍數是多少？
-    /// </summary>
+    /// 2 * 2 * 3 與 2 * 3 * 5 及 3 * 5 * 7 的最小公倍數是多少？
     [Question(difficulty: 1)]
     public Func<Question> _2 => () =>
     {
@@ -82,19 +76,17 @@ public class GcfAndLcm : IUnit
             ]).ToQuestion();
     };
 
-    /// <summary>
-    ///     42 / 🌵 = 🪴 .. 2，如果 🪴 比 1 大，🌵 最大是多少？
-    /// </summary>
+    /// 42 / 🌵 = 🪴 .. 2，如果 🪴 比 1 大，🌵 最大是多少？
     [Question(difficulty: 1)]
     public Func<Question> _3 => () =>
     {
         var comp = (times
-                    + (2, new R(1, 2))
-                    + (3, new R(1, 2))
-                    + (4, new R(0, 2))
-                    + (5, new R(0, 2))
-                    + (6, new R(0, 2))
-                    + (7, new R(0, 2))).Product();
+                  + (2, new R(1, 2))
+                  + (3, new R(1, 2))
+                  + (4, new R(0, 2))
+                  + (5, new R(0, 2))
+                  + (6, new R(0, 2))
+                  + (7, new R(0, 2))).Product();
         var factors   = MathG.GetFactors(comp, withoutSelf: true);
         var divider   = (factors >> (new C(1), f => f is >= 1 and <= 10))[0];
         var quotient  = comp / divider;
@@ -122,13 +114,13 @@ public class GcfAndLcm : IUnit
     public Func<Question> _4 => () =>
     {
         var from       = commas + [2, 3, 4];
+        var gcf        = from                          >> new C(new R(2, 3), canRepeat: true);
         var mult       = commas + [4, 6, 7, 9, 11, 13] >> new C(3);
-        var gcf        = from >> new C(new R(2, 3), true);
         var a          = (gcf + mult[0]).Product();
         var b          = (gcf + mult[1]).Product();
         var c          = (gcf + mult[2]).Product();
         var factors    = MathG.GetFactors(gcf.Product());
-        var whichIsNot = new R(2, 10, factors);
+        var whichIsNot = new R(2, 10, except: factors);
         return new QuestionBuilder(
             [
                 $@"以下哪一個數不是 \({a}\\) 與 \({b}\) 及 \({c}\) 的公因數？\",
@@ -158,5 +150,31 @@ public class GcfAndLcm : IUnit
                 $@"{a + a[1]}",
                 $@"{a + a[2]}",
             ]).ToQuestion();
+    };
+
+    /// 求 64 與 30 的最小公倍數？
+    [Question(difficulty: 1)]
+    public Func<Question> _6 => () =>
+    {
+        var f       = new Seq<int>([2, 3, 4])          >> new C(2, canRepeat: true); // 因數乘積
+        var mult    = new Seq<int>([2, 3, 4, 5, 6, 7]) >> new C(2);                  // 因數乘積
+        var lcm     = f[..].Product() * mult[..].Product();                          // 最小公倍數
+        var a       = f[..].Product() * mult[0];
+        var b       = f[..].Product() * mult[1];
+        return new QuestionBuilder(
+            [
+                @$"求 \({a}\) 與 \({b}\) 的最小公倍數？",
+                @$"求 \([{a}, {b}] =?\)",
+            ],
+            @$"\({lcm}\)",
+            [
+                $@"\({2 * 2 * mult[..].Product()}\)",
+                $@"\({3 * 2 * mult[..].Product()}\)",
+                $@"\({4 * 2 * mult[..].Product()}\)",
+                $@"\({3 * 3 * mult[..].Product()}\)",
+                $@"\({4 * 3 * mult[..].Product()}\)",
+                $@"\({4 * 4 * mult[..].Product()}\)",
+            ]
+        ).ToQuestion();
     };
 }

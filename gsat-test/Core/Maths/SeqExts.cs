@@ -5,7 +5,7 @@ namespace Gsat.Core.Maths;
 
 public static class SeqExts
 {
-    public static Seq<T> ToBuilder<T>(this IEnumerable<T> ie)
+    public static Seq<T> ToSeq<T>(this IEnumerable<T> ie)
     {
         return new Seq<T>(ie);
     }

@@ -61,10 +61,17 @@ public partial struct Seq<T>
     /// <summary>
     ///     透過 C 來選 Seq&lt;T&gt; 的元素
     /// </summary>
-    public static Seq<T> operator >>(Seq<T> a, C b)
+    /// <exception cref="ArgumentOutOfRangeException">C 所要取的數量大於 Seq 且不能重複時。</exception>
+    public static Seq<T> operator >> (Seq<T> a, C b)
     {
         var list = new List<T>();
         var src  = a.ToSpan();
+
+        if (src.Length < b.count && !b.canRepeat)
+            throw new ArgumentOutOfRangeException(
+                nameof(C.count),
+                "C 的 count 大於 Seq 的長度，又不能重複元素！會導致無限迴圈。");
+
         if (!b.index.HasValue && !b.range.HasValue)
         {
             while (list.Count < b.count)
@@ -103,13 +110,53 @@ public partial struct Seq<T>
             return new Seq<T>(list, a);
         }
     }
+
+    public static Seq<Seq<T>> operator >>> (Seq<T> a, C c)
+    {
+        var items = a.ToList();
+        int count = c.count.Value;
+        var result = new List<List<T>>();
+        GenerateCombinations(items, count, [], result);
+        return result.Select(i => new Seq<T>(i, a)).ToSeq();
+
+        void GenerateCombinations(List<T> items, int count, List<T> current, List<List<T>> result)
+        {
+            // 終止條件：選取數量達到需求
+            if (current.Count == count)
+            {
+                result.Add([..current]);
+                return;
+            }
+
+            // 終止條件：沒有更多元素可供選擇
+            if (items.Count == 0)
+            {
+                return;
+            }
+
+            // 選擇第一個元素
+            current.Add(items[0]);
+            GenerateCombinations(items.GetRange(1, items.Count - 1), count, current, result);
+
+            // 不選第一個元素
+            current.RemoveAt(current.Count - 1);
+            GenerateCombinations(items.GetRange(1, items.Count - 1), count, current, result);
+        }
+    }
     
     /// <summary>
     ///     透過 Func&lt;T, bool&gt; 來篩選 Seq&lt;T&gt; 的元素以 C 來選元素
     /// </summary>
-    public static Seq<T> operator >>(Seq<T> a, (C, Func<T, bool>) tuple)
+    /// <exception cref="ArgumentOutOfRangeException">C 所要取的數量大於 Seq 且不能重複時。</exception>
+    public static Seq<T> operator >> (Seq<T> a, (C, Func<T, bool>) tuple)
     {
-        return a.array.Where(i => tuple.Item2(i)).ToBuilder() >> tuple.Item1;
+        var src = a.array.Where(i => tuple.Item2(i)).ToSeq();
+        if (src.Count < tuple.Item1.count && !tuple.Item1.canRepeat)
+            throw new ArgumentOutOfRangeException(
+                nameof(C.count),
+                "C 的 count 大於 Seq 的長度，又不能重複元素！會導致無限迴圈。");
+
+        return src >> tuple.Item1;
     }
     
     /// <summary>

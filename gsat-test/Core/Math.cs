@@ -30,8 +30,10 @@ public static class MathG
             else b       %= a;
         }
 
-        return a | b;
+        return a == 0 ? b : a;
     }
+
+    public static int Gcm(int a, int b) => a * b / Gcf(a, b);
 
     public static Seq<int> GetFactors(int a, bool withoutSelf = false)
     {
@@ -43,5 +45,34 @@ public static class MathG
         }
 
         return new Seq<int>(list);
+    }
+
+    public static int Digits(this int a)
+    {
+        a = a < 0 ? -a : a;
+        return a.ToString().Length;
+    }
+
+    public static int Pow(this int a, int p)
+    {
+        if (p < 0) throw new Exception("Power must be non-negative.");
+        if (p == 0) return 1;
+        for (int i = 0; i < p; i++) a *= a;
+        return a;
+    }
+
+    public static int Log(this int a, int @base)
+    {
+        if (a < 0 || @base < 0) throw new Exception("Both base and number must be non-negative.");
+        if (a == 0) return 0;
+        if (a == 1) return 1;
+        var i = 0;
+        while (a > 1)
+        {
+            a /= @base;
+            i++;
+        }
+
+        return i;
     }
 }
