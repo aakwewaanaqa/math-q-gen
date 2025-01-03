@@ -33,7 +33,7 @@ public static class MathG
         return a == 0 ? b : a;
     }
 
-    public static int Gcm(int a, int b) => a * b / Gcf(a, b);
+    public static int Lcm(int a, int b) => a * b / Gcf(a, b);
 
     public static Seq<int> GetFactors(int a, bool withoutSelf = false)
     {
@@ -57,8 +57,21 @@ public static class MathG
     {
         if (p < 0) throw new Exception("Power must be non-negative.");
         if (p == 0) return 1;
-        for (int i = 0; i < p; i++) a *= a;
+        for (int i = 1; i < p; i++) a *= a;
         return a;
+    }
+
+    public static bool IsPowOf(this int a, int b)
+    {
+        if (a == b) return true;
+
+        while (b < a)
+        {
+            b *= b;
+            if (b == a) return true;
+        }
+
+        return false;
     }
 
     public static int Log(this int a, int @base)

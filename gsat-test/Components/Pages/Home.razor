@@ -18,10 +18,10 @@
 
 <p> @q.question </p>
 <ol>
-    <li> @q.selections[0] </li>
-    <li> @q.selections[1] </li>
-    <li> @q.selections[2] </li>
-    <li> @q.selections[3] </li>
+    @foreach (var t in q.selections)
+    {
+        <li> @t </li>
+    }
 </ol>
 <p> 答案是 : @q.answer</p>
 <p style="white-space: preserve"> @q.explanation </p>

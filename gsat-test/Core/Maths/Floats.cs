@@ -1,4 +1,6 @@
-﻿namespace Gsat.Core.Maths;
+﻿using System.Text.RegularExpressions;
+
+namespace Gsat.Core.Maths;
 
 public readonly struct Floats(int i, int shift)
 {
@@ -29,17 +31,16 @@ public readonly struct Floats(int i, int shift)
     public static Floats operator -(Floats a, Floats b)
     {
         var shiftDelta = a.shift > b.shift ? a.shift - b.shift : b.shift - a.shift;
-        var less       = a.shift > b.shift ? b : a;
-        var more       = a.shift > b.shift ? a : b;
-        var newI       = more.i - less.i * 10.Pow(shiftDelta);
-        return new Floats(newI, more.shift).Simplify;
+        return a.shift > b.shift ?
+            new Floats(a.i - b.i * 10.Pow(shiftDelta), a.shift).Simplify :
+            new Floats(a.i * 10.Pow(shiftDelta) - b.i, a.shift).Simplify;
     }
 
     public static Floats operator *(Floats a, int b)
     {
         if (b == 0) return new Floats(0, 0);
         if (b == 1) return a;
-        if (b % 10 == 0)
+        if (b.IsPowOf(10))
         {
             var newShift   = a.shift - b.Log(10);
             var newI       = a.i;
@@ -64,7 +65,7 @@ public readonly struct Floats(int i, int shift)
     {
         if (b == 0) throw new DivideByZeroException("Divisor cannot be zero.");
         if (b == 1) return a;
-        if (b % 10 == 0)
+        if (b.IsPowOf(10))
         {
             var newShift    = a.shift + b.Log(10);
             var newI        = a.i;
@@ -83,6 +84,16 @@ public readonly struct Floats(int i, int shift)
         var maxShift = a.shift > b.shift ? a.shift : b.shift;
         var newI     = (a.i * maxShift) / (b.i * maxShift);
         return new Floats(newI, maxShift).Simplify;
+    }
+
+    public static bool operator >(Floats a, Floats b)
+    {
+        return (a - b).i > 0;
+    }
+
+    public static bool operator <(Floats a, Floats b)
+    {
+        return (a - b).i < 0;
     }
 
     public Floats Simplify
@@ -131,10 +142,26 @@ public readonly struct Floats(int i, int shift)
             if (signIntStr.Length < shift) signIntStr = new String('0', shift - signIntStr.Length) + signIntStr;
             signIntStr = signIntStr.Insert(signIntStr.Length - shift, ".");
             if (signIntStr[0] == '.') signIntStr = "0" + signIntStr;
-            signIntStr = signIntStr.TrimEnd('0');
+            signIntStr = signIntStr.TrimEnd('0', '.');
             return i < 0 ? "-" + signIntStr : signIntStr;
         }
         catch (Exception e) { throw new Exception($"{i} {shift}", e); }
+    }
+
+    public string ToString(string format = "E")
+    {
+        switch (format)
+        {
+            case "E":
+            {
+                var str = $@"{i} \div {10.Pow(shift)}";
+                return str;
+            }
+            default:
+            {
+                return base.ToString();
+            }
+        }
     }
 
     public Frac ToFrac()
