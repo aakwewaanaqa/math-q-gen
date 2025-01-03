@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="177"
+   height="101"
+   viewBox="0 0 46.831211 26.7229"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="小數3位數以下除法.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="8"
+     inkscape:cx="63.4375"
+     inkscape:cy="52.5625"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="scale" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:groupmode="layer"
+     id="shapes"
+     inkscape:label="shapes">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       id="theRectangle"
+       width="45"
+       height="25"
+       x="1"
+       y="1"
+       inkscape:label="rectangle" />
+    <path
+       style="opacity:1;fill:#c0ab3f;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       d="M 7,26 L 13,1 l 15,0 l 3,25 z"
+       id="theTrapeZoid" />
+  </g>
+  <g
+     inkscape:label="scale"
+     inkscape:groupmode="layer"
+     id="scale">
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 4,1 c 0,25 0,25 0,25"
+       id="path1" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 7,1 c 0,25 0,25 0,25"
+       id="path2" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 10,1 c 0,25 0,25 0,25"
+       id="path3" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 13,1 c 0,25 0,25 0,25"
+       id="path4" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 16.264584,1 c 0,25 0,25 0,25"
+       id="path5" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 19,1 c 0,25 0,25 0,25"
+       id="path6" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 22,1 c 0,25 0,25 0,25"
+       id="path7" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 25,1 c 0,25 0,25 0,25"
+       id="path8" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 28,1 c 0,25 0,25 0,25"
+       id="path9" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 31,1 c 0,25 0,25 0,25"
+       id="path10" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 34,1 c 0,25 0,25 0,25"
+       id="path11" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 37,1 c 0,25 0,25 0,25"
+       id="path12" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 40,1 c 0,25 0,25 0,25"
+       id="path13" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.26458333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:0.26458333,0.79375005;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+       d="m 43,1 c 0,25 0,25 0,25"
+       id="path14" />
+  </g>
+</svg>
